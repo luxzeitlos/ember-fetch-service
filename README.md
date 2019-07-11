@@ -70,6 +70,19 @@ export default FetchService.extend({
 Any headers specified with the `fetch()` call will overwrite headers specified on the service.
 
 
+## using `ky`
+`ember-fetch-service` can use [`ky`](https://github.com/sindresorhus/ky) to add a more high-level fetch api. This is opt-in and can be enabled with `ember generate ember-fetch-service-use-ky`.
+
+This will
+
+1. install `ember-auto-import`
+2. install `ky`
+3. generate a file `app/services/fetch.js` that imports `ky` and gives it to the `fetch` service
+
+this will expose a `ky` property on the `fetch` service. The result object can be used like `ky`, and also exposes the additional shortcut methods allowing things like `this.fetch.ky.put(...)`.
+
+However the `ky` property is only a proxy to the original `ky` and does *not* expose `create` or `extend`. Only the direct function call and the HTTP method named properties are supported.
+
 Contributing
 ------------------------------------------------------------------------------
 

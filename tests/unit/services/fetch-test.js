@@ -1,6 +1,7 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import Pretender from 'pretender';
+import ky from 'ky';
 
 module('Unit | Service | fetch', function(hooks) {
   setupTest(hooks);
@@ -102,5 +103,17 @@ module('Unit | Service | fetch', function(hooks) {
     });
 
     assert.equal(req.status, 200, 'Status code is ok')
+  });
+
+  test('it can ky a simple text', async function(assert) {
+    let service = this.owner.lookup('service:fetch');
+    service.set('kyRef', ky);
+
+    server.get('/network', () => [200, {}, 'hello network']);
+    // const req = await service.ky('/network');
+    const req = await ky('/network');
+
+    assert.equal(req.status, 200, 'Status code is ok');
+    assert.equal(await req.text(), 'hello network', 'Status code is ok');
   });
 });
